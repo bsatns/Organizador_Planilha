@@ -19,5 +19,18 @@
     </form>
     </div>
     </div>
+    <script>
+    function showLoading() {
+        document.getElementById("loading").style.display = "block";
+    }
+    </script>
+
+    <form method="POST" enctype="multipart/form-data" onsubmit="showLoading()">
+    <!-- inputs do formulário -->
+    </form>
+
+    <div id="loading" style="display:none;">Processando... Aguarde.</div>
+
+
 </body>
 </html>

@@ -11,9 +11,12 @@ import numpy as np
 
 app = Flask(__name__)
 
+# Aumentar o limite de upload (exemplo: 100 MB)
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  
+
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
-RESULT_FOLDER = os.path.join(BASE_DIR, 'results')
+RESULT_FOLDER = os.path.abspath (os.path.join (BASE_DIR,'..' ,'results'))
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(RESULT_FOLDER, exist_ok=True)
@@ -38,8 +41,12 @@ def index():
                     original_path = os.path.join(UPLOAD_FOLDER, filename)
                     file.save(original_path)
 
+                    print(f"Lendo {filename}")
                     df = pd.read_excel(original_path)
+                    print(f"{len(df)} linhas lidas.")
+
                     splits = np.array_split(df, num_parts)
+                    print(f"Dividido em {len(splits)} partes.")
 
                     for i, part_df in enumerate(splits):
                         part_name = f"{filename.rsplit('.', 1)[0]}_part{i+1}.xlsx"
@@ -47,6 +54,7 @@ def index():
                         part_df.to_excel(part_path, index=False)
 
                         if formatar:
+                            print(f"Formatando parte {i+1}")
                             wb = openpyxl.load_workbook(part_path)
                             ws = wb.active
 
@@ -54,15 +62,15 @@ def index():
                             ws[f'{col_letter}1'] = "OBSERVAÇÃO"
 
                             opcoes = [
-                                "ATIVO WHATSAPP", "SEM INTERESSE", "VENDA", "TEL NÃO ATENDEU",
-                                "SEM POSSIBILIDADES", "SEM CONTATO", "SEM WHATSAPP", "SENDO TRAB"
-                            ]
+                                    "ATIVO WHATSAPP", "SEM INTERESSE", "VENDA", "TEL NÃO ATENDEU",
+                                    "SEM POSSIBILIDADES", "SEM CONTATO", "SEM WHATSAPP", "SENDO TRAB"
+                                ]
                             dv = DataValidation(type="list", formula1='"' + ",".join(opcoes) + '"')
                             ws.add_data_validation(dv)
                             dv.add(f"{col_letter}2:{col_letter}{ws.max_row}")
 
                             for row in range(2, ws.max_row + 1):
-                                ws[f'{col_letter}{row}'] = ""
+                                    ws[f'{col_letter}{row}'] = ""
 
                             wb.save(part_path)
 
@@ -71,13 +79,14 @@ def index():
 
                     os.remove(original_path)
 
-            # Confirma se o ZIP realmente foi criado
+            print(f"Arquivo ZIP criado: {zip_path}")
             if not os.path.exists(zip_path):
                 return f"Erro ao gerar o ZIP: {zip_path}", 500
 
             return send_file(zip_path, as_attachment=True)
 
         except Exception as e:
+            print(f"Erro no processamento: {e}")
             return f"Erro no processamento: {str(e)}", 500
 
     return render_template("index.html")
@@ -85,3 +94,6 @@ def index():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
+if __name__== "__main__":
+    app.run (debug=True, use_realoader = False)    
