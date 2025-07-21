@@ -30,10 +30,10 @@ def aplicar_formatacao_condicional(ws, coluna_obs):
         "SEM INTERESSE": "FFC7CE",
         "VENDA": "00B050",
         "TEL NÃO ATENDEU": "FFEB9C",
-        "SEM POSSIBILIDADES": "FFEB9C",
-        "SEM CONTATO": "FFEB9C",
-        "SEM WHATSAPP": "FFEB9C",
-        "SENDO TRAB": "BDD7EE"
+        "SEM POSSIBILIDADES": "FF0000",
+        "SEM CONTATO": "BDB76B",
+        "SEM WHATSAPP": "8B008B",
+        "SENDO TRAB": "FFA500"
     }
 
     inicio = 2
