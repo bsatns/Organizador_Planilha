@@ -3,34 +3,73 @@
 <head>
     <title>Format</title>
     <link rel="stylesheet" href="{{url_for('static', filename= 'style.css')}}">
+    <meta charset="UTF-8">
 </head>
 <body class="body">
     <div class="home">
-    <div class="titulo">
-        <h1>FORMATAR PLANILHAS</h1>
-    </div>    
-    <br>
-    <div class="form">
-    <form action= "/" method="post" enctype="multipart/form-data">
-        <input type="file" name="Planilhas" multiple required><br><br>
-        <h3 class="text">QUANTIDADE DE PLANILHAS DESEJADAS</h3> <input type="number" name="num_parts" required><br><br><br>
-        <label class="formatar"><input type="checkbox" name="formatar" value="sim"> FORMATAR</label><br><br>
-        <input class="enviar" type="submit" value="ENVIAR">
-    </form>
-    </div>
-    </div>
-    <script>
-    function showLoading() {
-        document.getElementById("loading").style.display = "block";
-    }
-    </script>
+        <div class="titulo">
+            <h1>FORMATAR PLANILHAS</h1>
+        </div>    
+        <br>
+        <div class="form">
+            <form action="/gerar_planilhas" method="post" enctype="multipart/form-data" onsubmit="showLoading()">
+                <input type="file" name="Planilhas" multiple required><br><br>
 
-    <form method="POST" enctype="multipart/form-data" onsubmit="showLoading()">
-    <!-- inputs do formulário -->
-    </form>
+                <h3 class="text">SELECIONE O SETOR</h3>
+                <select name="setor" onchange="mostrarColaboradores(this.value)" required>
+                    <option value="">-- Escolha um setor --</option>
+                    {% for setor in colaboradores %}
+                        <option value="{{ setor }}">{{ setor }}</option>
+                    {% endfor %}
+                </select>
+                <br><br>
+
+                <div id="colaboradores" style="margin-bottom: 20px;">
+                    <!-- Checkboxes dos colaboradores aparecerão aqui -->
+                </div>
+
+                <label class="formatar">
+                    <input type="checkbox" name="SELETOR" value="sim"> SELETOR
+                </label><br><br>
+
+                <input class="enviar" type="submit" value="ENVIAR">
+            </form>
+        </div>
+    </div>
 
     <div id="loading" style="display:none;">Processando... Aguarde.</div>
 
+    <script>
+        const colaboradoresData = {{ colaboradores | tojson }};
 
+        function showLoading() {
+            document.getElementById("loading").style.display = "block";
+        }
+
+        function mostrarColaboradores(setor) {
+            const container = document.getElementById("colaboradores");
+            container.innerHTML = "";
+
+            if (setor && colaboradoresData[setor]) {
+                colaboradoresData[setor].forEach(nome => {
+                    const div = document.createElement("div");
+                    div.classList.add("colaborador");
+
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.name = "colaboradores";
+                    checkbox.value = nome;
+
+                    const label = document.createElement("label");
+                    label.textContent = " " + nome;
+
+                    div.appendChild(checkbox);
+                    div.appendChild(label);
+
+                    container.appendChild(div);
+                });
+            }
+        }
+    </script>
 </body>
 </html>
