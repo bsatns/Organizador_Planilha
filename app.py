@@ -67,7 +67,8 @@ def gerar_planilhas():
         if not selecionados:
             return "Nenhum colaborador selecionado.", 400
 
-        formatar = request.form.get('formatar') == 'sim'
+        seletor = request.form.get('SELETOR') == "sim"
+        print ("Seletor", seletor)
 
         zip_name = f"planilhas_{uuid.uuid4().hex}.zip"
         zip_path = os.path.join(RESULT_FOLDER, zip_name)
@@ -88,12 +89,14 @@ def gerar_planilhas():
                     part_path = os.path.join(UPLOAD_FOLDER, part_name)
                     part_df.to_excel(part_path, index=False)
 
-                    if formatar:
+                    print ('Seletor', seletor)
+                    if seletor:
                         wb = openpyxl.load_workbook(part_path)
                         ws = wb.active
 
-                        col_letter = get_column_letter(ws.max_column + 1)
-                        ws[f'{col_letter}1'] = "OBSERVAÇÃO"
+                        obs_col_index = ws.max_column+1
+                        obs_col_letter = get_column_letter(obs_col_index)
+                        ws.cell(row=1, column=obs_col_index, value="OBSERVAÇÃO")
 
                         opcoes = [
                             "ATIVO WHATSAPP", "SEM INTERESSE", "VENDA", "TEL NÃO ATENDEU",
@@ -101,12 +104,12 @@ def gerar_planilhas():
                         ]
                         dv = DataValidation(type="list", formula1='"' + ",".join(opcoes) + '"')
                         ws.add_data_validation(dv)
-                        dv.add(f"{col_letter}2:{col_letter}{ws.max_row}")
+                        dv.add(f"{obs_col_letter}2:{obs_col_letter}{ws.max_row}")
 
                         for row in range(2, ws.max_row + 1):
-                            ws[f'{col_letter}{row}'] = ""
+                            ws[f'{obs_col_letter}{row}'] = ""
 
-                        aplicar_formatacao_condicional(ws, col_letter)
+                        aplicar_formatacao_condicional(ws,obs_col_letter)
 
                         wb.save(part_path)
 
