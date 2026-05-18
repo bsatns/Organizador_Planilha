@@ -25,9 +25,8 @@ os.makedirs(RESULT_FOLDER, exist_ok=True)
 
 # Lista de colaboradores por setor
 colaboradores_por_setor = {
-    "Callcenter": ["Bruna", "Bruna Aguiar", "Beatriz", "Camila","Cláudia", "Edineide","Erica", "Maria Nayara", "Mayara", "Naara", "Tamires", "Raissa"],
+    "Callcenter": ["Agatha", "Thalita", "Bruna Aguiar","Ana Paula", "Cláudia","Lais","Ticiana","Edineide","Erica", "Maria Nayara","Naara", "Tamires"],
     "Matriz": ["Marta", "Jamile"],
-    "Cajazeiras": ["Ana Paula", "Agatha"]
 }
 
 def aplicar_formatacao_condicional(ws, coluna_obs):
