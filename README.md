@@ -1,6 +1,8 @@
 **Divisor de Planilhas Excel**
 
-Sistema desenvolvido em Python com Flask para automatizar a divisão de planilhas Excel entre colaboradores, facilitando a distribuição de atividades e reduzindo o trabalho manual.
+Sistema desenvolvido em Python com Flask para automatizar a divisão de planilhas Excel, facilitando a distribuição de atividades e reduzindo o trabalho manual. 
+Exemplo: Caso possua uma base dados com 2.000 linhas e o usuário deseje repartir em 5 bases com a quantidade de linhas equivalente entre elas, a aplicação faz essa divisão automaticamente, baixando no computador a quantidade de planilhas desejadas pelo usuário. 
+**OBS:** Essa aplicação foi pensada e desenvolvida para resolver um problema do cotidiano de uma empresa específica. 
 
 **Funcionalidades**
 
